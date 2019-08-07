@@ -66,7 +66,8 @@ CONCURRENT_REQUESTS = 32
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
    'tire_prices.pipelines.TirePricesPipeline': 300,
-   'tire_prices.pipelines.MySQLPipeline': 200
+   'tire_prices.pipelines.MySQLPipeline': 200,
+   'tire_prices.pipelines.ZapaskaPricesPipeline':250
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
