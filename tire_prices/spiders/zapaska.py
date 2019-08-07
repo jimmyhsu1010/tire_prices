@@ -52,13 +52,12 @@ class ZapaskaSpider(scrapy.Spider):
 
 
     def parse_item(self, response):
-
         item = TirePricesItem()
         rule = re.compile(r"[^А-Яа-я.]([А-Яа-я]+|[A-Za-z]+)")
         brand_string = response.xpath("//div[1]/h1[1]/text()").get()
         item["date"] = str(datetime.date.today())
         item["company"] = "Zapaska"
-        item["brand"] = rule.search(brand_string).group(1)
+        item["brand"] = rule.search(brand_string).group(1).upper()
         item["season"] = response.xpath("//div[@class='col-md-8']//span[1]/text()").get().split(":")[1].replace(" ","")
         item["model"] = response.xpath("/html[1]/body[1]/section[1]/div[1]/div[3]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[1]/span[1]/text()").get().split(":")[1].replace(" ","")
         rule_2 = re.compile(r"[A-Z][0-9]+")
