@@ -10,6 +10,11 @@ class VirbakSpider(CrawlSpider):
     name = 'virbak'
     allowed_domains = ['virbacavto.ru']
     start_urls = ['https://www.virbacavto.ru/catalog/shiny_legkovye/?nav=page-1']
+    custom_settings = {
+        'ITEM_PIPELINES':{
+   'tire_prices.pipelines.TirePricesPipeline': 300,
+   'tire_prices.pipelines.MySQLPipeline': 200,}
+}
 
     rules = (
         Rule(LinkExtractor(allow=r'https://www.virbacavto.ru/catalog/goods/shiny_legkovye-.*'), callback='parse_item'),

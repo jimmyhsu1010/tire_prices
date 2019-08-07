@@ -12,7 +12,7 @@ class ZapaskaSpider(scrapy.Spider):
     allowed_domains = ['www.sibzapaska.ru']
     # start_urls = ["https://www.sibzapaska.ru/podbor-shin-i-diskov/?ajax=y&=17&filter=Y&f=shini&arrFilter_P3_MIN=1&arrFilter_P3_MAX=31590.00"]
     custom_settings = {
-        'ITEM_PIPELINES':{'tire_prices.pipelines.ZapaskaPricesPipeline':250}
+        'ITEM_PIPELINES':{'tire_prices.pipelines.ZapaskaPricesPipeline':250, 'tire_prices.pipelines.MySQLPipeline': 200,}
     }
 
     headers = {
