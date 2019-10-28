@@ -21,4 +21,20 @@ class TirePricesItem(scrapy.Item):
     index = scrapy.Field()
     price = scrapy.Field()
 
+class PrinterItem(scrapy.Item):
+    date = scrapy.Field()
+    brand = scrapy.Field()
+    type = scrapy.Field()
+    print_type = scrapy.Field()
+    print_tech = scrapy.Field()
+    qt_print_month = scrapy.Field()
+    max_size = scrapy.Field()
+    auto_duplex = scrapy.Field()
+    max_resolution = scrapy.Field()
+    print_speed = scrapy.Field()
+    warm_up = scrapy.Field()
+    first_print = scrapy.Field()
+    scanner_type = scrapy.Field()
+
+
 
