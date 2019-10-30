@@ -25,5 +25,5 @@ class PrinterSpider(CrawlSpider):
         keys = response.xpath('//div[1]/div/dl/dt[1]/span[1]/text()').extract() # Key的位置
         values = response.xpath('//div[1]/div/dl/dd[1]/span[1]/text()').extract() # Value的位置
         data = dict(zip(keys, values))
-        if
-        yield item
+        print(data)
+        # yield item
