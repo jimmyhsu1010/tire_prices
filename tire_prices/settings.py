@@ -67,7 +67,8 @@ CONCURRENT_REQUESTS = 32
 ITEM_PIPELINES = {
    'tire_prices.pipelines.TirePricesPipeline': 300,
    'tire_prices.pipelines.MySQLPipeline': 200,
-   'tire_prices.pipelines.ZapaskaPricesPipeline':250
+   'tire_prices.pipelines.ZapaskaPricesPipeline': 250,
+   'tire_prices.pipelines.PrinterPricePipeline': 100
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

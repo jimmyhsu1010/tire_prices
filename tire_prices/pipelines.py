@@ -87,3 +87,21 @@ class ZapaskaPricesPipeline(object):
     def close_spider(self, spider):
         self.file.close()
 
+class PrinterPricePipeline(object):
+    def open_spider(self, spider):
+        self.file = open('yandex_price.csv', 'a')
+        self.writer = csv.writer(self.file)
+        # self.writer.writerow(
+        #     ['Date', 'Company','Brand', 'Season', 'Model', 'Size', 'Diameter', 'Index', 'Price'])
+
+
+    def process_item(self, item, spider):
+
+        self.writer.writerow((item['date'], item['company'], item['brand'],
+                             item['season'], item['model'],
+                             item['size'], item['diameter'], item['index'],
+                             item['price']))
+        return item
+
+    def close_spider(self, spider):
+        self.file.close()
