@@ -15,7 +15,7 @@ class PrinterSpider(CrawlSpider):
         'ITEM_PIPELINES': {'tire_prices.pipelines.PrinterPricePipeline': 100}}
 
     rules = (
-        Rule(LinkExtractor(allow=r'https://market.yandex.ru/catalog--printery-i-mfu.*(page=)\d{1,3}'), follow=True),
+        Rule(LinkExtractor(allow=r'https://market.yandex.ru/catalog--printery-i-mfu.*(page=)\d{1,2}'), follow=True),
         Rule(LinkExtractor(allow=r'https://market.yandex.ru/product--(mfu|printer)-.*'), follow=True),
         Rule(LinkExtractor(allow=r'https://market.yandex.ru/product--(mfu|printer)-.*(/spec?).*'), callback='parse_item')
     )
