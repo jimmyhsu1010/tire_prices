@@ -10,7 +10,7 @@ class PrinterSpider(CrawlSpider):
     name = 'printer'
     allowed_domains = ['regard.ru']
     start_urls = ['https://www.regard.ru/catalog/filter/?id=MTgwMDA7MTkyNCw1Mjc1LDUzMTE7MTkyNSw1MjcyOzE5MjYsNTI3MA==&page=1']
-
+    # start_urls = ['https://www.regard.ru/catalog/tovar18282.htm']
     custom_settings = {
         'ITEM_PIPELINES': {'tire_prices.pipelines.PrinterPricePipeline': 100}}
 
@@ -26,6 +26,9 @@ class PrinterSpider(CrawlSpider):
         if 'Внимание ' in keys and len(values) - len(keys) == 3:
             keys.remove('Внимание ')
             del values[2:4]
+            data = dict(zip(keys, values))
+        elif 'Внимание ' in keys and len(values) - len(keys) == 1:
+            keys.remove('Внимание ')
             data = dict(zip(keys, values))
         else:
             data = dict(zip(keys, values))
@@ -161,6 +164,8 @@ class PrinterSpider(CrawlSpider):
             item['display_size'] = 'N/A'
         if 'Размеры ' in data.keys():
             item['dimension'] = data['Размеры ']
+        elif 'Размеры (ШхВхГ)' in data.keys():
+            item['dimension'] = data['Размеры (ШхВхГ)']
         else:
             item['dimension'] = 'N/A'
         if 'Вес' in data.keys():
