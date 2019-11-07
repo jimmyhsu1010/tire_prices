@@ -25,6 +25,7 @@ class PrinterItem(scrapy.Item):
     date = scrapy.Field() # 爬取日期
     brand = scrapy.Field() # 品牌名稱
     model = scrapy.Field() # 型號
+    code = scrapy.Field() # 原廠代號
     price = scrapy.Field() # 價格
     type = scrapy.Field() # 類型
     print_type = scrapy.Field() # 列印類型（黑白或彩色）

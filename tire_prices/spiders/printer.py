@@ -6,10 +6,11 @@ from tire_prices.items import PrinterItem
 import datetime
 
 
+
 class PrinterSpider(CrawlSpider):
     name = 'printer'
     allowed_domains = ['regard.ru']
-    start_urls = ['https://www.regard.ru/catalog/filter/?id=MTgwMDA7MTkyNCw1Mjc1LDUzMTE7MTkyNSw1MjcyOzE5MjYsNTI3MA==&page=1']
+    start_urls = ['https://www.regard.ru/catalog/filter/?id=MTgwMDA7MTkyNCw1Mjc1LDUzMTE7MTkyNSw1MjcyOzE5MjYsNTI3MA==&page=1', 'https://yandex.ru']
     # start_urls = ['https://www.regard.ru/catalog/tovar18282.htm']
     custom_settings = {
         'ITEM_PIPELINES': {'tire_prices.pipelines.PrinterPricePipeline': 100}}
@@ -17,12 +18,14 @@ class PrinterSpider(CrawlSpider):
     rules = (
         Rule(LinkExtractor(allow=r'https://www.regard.ru/catalog/filter.*page=\d{1,2}'), follow='True'),
         Rule(LinkExtractor(allow=r'https://www.regard.ru/catalog/tovar\d*.htm'), callback='parse_item'),
+        Rule(LinkExtractor(allow=r'https://yandex.ru'), callback='parse_item'),
     )
 
     def parse_item(self, response):
         item = PrinterItem()
         keys = response.xpath('//div[3]/div[1]/table[1]//tr/td[not(@colspan) and position()=1]/text()').extract() # Key的位置
         values = response.xpath('//div[3]/div[1]/table[1]//tr/td[not(@colspan) and position()=2]/text()').extract() # Value的位置
+        model_list = response.xpath('//div[1]/div[1]/h1[1]/text()').get().split(' ')
         if 'Внимание ' in keys and len(values) - len(keys) == 3:
             keys.remove('Внимание ')
             del values[2:4]
@@ -37,10 +40,20 @@ class PrinterSpider(CrawlSpider):
             item['brand'] = data['Производитель']
         else:
             item['brand'] = 'N/A'
-        if 'Код производителя' in data.keys():
-            item['model'] = data['Код производителя']
+        if len(model_list) == 3:
+            item['model'] = model_list[2]
+        elif len(model_list) >= 4 and 'Konica' in model_list:
+            item['model'] = ' '.join(model_list[3:])
+        elif len(model_list) >= 4 and 'HP' in model_list:
+            item['model'] = ' '.join(model_list[2:-1])
+        elif len(model_list) >= 4 and 'Canon' in model_list:
+            item['model'] = ' '.join(model_list[2:-1])
         else:
-            item['model'] = 'N/A'
+            item['model'] = ' '.join(model_list[2:])
+        if 'Код производителя' in data.keys():
+            item['code'] = data['Код производителя']
+        else:
+            item['code'] = 'N/A'
         item['price'] = response.xpath('//div[3]/span[2]/span[1]/text()').get().replace(' ', '') + ' руб.'
         if 'Устройство ' in data.keys():
             item['type'] = data['Устройство ']
