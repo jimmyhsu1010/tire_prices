@@ -23,6 +23,7 @@ class TirePricesItem(scrapy.Item):
 
 class PrinterItem(scrapy.Item):
     date = scrapy.Field() # 爬取日期
+    # currency = scrapy.Field() # 爬取當日匯率
     brand = scrapy.Field() # 品牌名稱
     model = scrapy.Field() # 型號
     code = scrapy.Field() # 原廠代號

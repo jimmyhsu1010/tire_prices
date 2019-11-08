@@ -9,6 +9,7 @@ import mysql.connector
 from mysql.connector import errorcode, connection
 from tire_prices import settings
 import logging
+from scrapy.exceptions import DropItem
 
 
 class TirePricesPipeline(object):

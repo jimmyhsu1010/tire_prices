@@ -10,18 +10,18 @@ import datetime
 class PrinterSpider(CrawlSpider):
     name = 'printer'
     allowed_domains = ['regard.ru']
-    start_urls = ['https://www.regard.ru/catalog/filter/?id=MTgwMDA7MTkyNCw1Mjc1LDUzMTE7MTkyNSw1MjcyOzE5MjYsNTI3MA==&page=1', 'https://yandex.ru']
+    start_urls = ['https://www.regard.ru/catalog/filter/?id=MTgwMDA7MTkyNCw1Mjc1LDUzMTEsNTUxMg==&page=1']
     # start_urls = ['https://www.regard.ru/catalog/tovar18282.htm']
     custom_settings = {
         'ITEM_PIPELINES': {'tire_prices.pipelines.PrinterPricePipeline': 100}}
 
     rules = (
-        Rule(LinkExtractor(allow=r'https://www.regard.ru/catalog/filter.*page=\d{1,2}'), follow='True'),
+        Rule(LinkExtractor(allow=r'https://www.regard.ru/catalog/filter/\?id=MTgwMDA7MTkyNCw1Mjc1LDUzMTEsNTUxMg==&page=\d{1,2}'), follow='True'),
         Rule(LinkExtractor(allow=r'https://www.regard.ru/catalog/tovar\d*.htm'), callback='parse_item'),
-        Rule(LinkExtractor(allow=r'https://yandex.ru'), callback='parse_item'),
     )
 
     def parse_item(self, response):
+        response = response.replace(body=response.body.replace(b'<br>', b'\t'))
         item = PrinterItem()
         keys = response.xpath('//div[3]/div[1]/table[1]//tr/td[not(@colspan) and position()=1]/text()').extract() # Key的位置
         values = response.xpath('//div[3]/div[1]/table[1]//tr/td[not(@colspan) and position()=2]/text()').extract() # Value的位置
@@ -185,5 +185,4 @@ class PrinterSpider(CrawlSpider):
             item['weight'] = data['Вес']
         else:
             item['weight'] = 'N/A'
-        # print(item)
         yield item
