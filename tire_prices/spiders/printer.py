@@ -21,10 +21,11 @@ class PrinterSpider(CrawlSpider):
     )
 
     def parse_item(self, response):
-        response = response.replace(body=response.body.replace(b'<br>', b'\t'))
+        response = response.replace(body=response.body.replace(b'<br>', b'')) # 將原碼中的<br>標籤去除
         item = PrinterItem()
         keys = response.xpath('//div[3]/div[1]/table[1]//tr/td[not(@colspan) and position()=1]/text()').extract() # Key的位置
         values = response.xpath('//div[3]/div[1]/table[1]//tr/td[not(@colspan) and position()=2]/text()').extract() # Value的位置
+        values = map(lambda x:x.replace('\r\n', '').strip(), values) # 去除values裡面所有的\r\n
         model_list = response.xpath('//div[1]/div[1]/h1[1]/text()').get().split(' ')
         if 'Внимание ' in keys and len(values) - len(keys) == 3:
             keys.remove('Внимание ')
@@ -186,3 +187,4 @@ class PrinterSpider(CrawlSpider):
         else:
             item['weight'] = 'N/A'
         yield item
+
