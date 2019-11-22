@@ -36,6 +36,8 @@ class PrinterSpider(CrawlSpider):
             data = dict(zip(keys, values))
         else:
             data = dict(zip(keys, values))
+        item['shop'] = 'Regard'
+        item['country'] = 'Russia'
         item["date"] = str(datetime.date.today())
         if 'Производитель' in data.keys():
             item['brand'] = data['Производитель']

@@ -92,13 +92,13 @@ class PrinterPricePipeline(object):
         self.file = open('regard_price.csv', 'a', encoding='utf-8', newline='')
         self.writer = csv.writer(self.file)
         self.writer.writerow(
-            ['日期', '品牌', '型號', '原廠代碼', '價格', '類型', '列印類型', '技術', '每月列印量', '最大尺寸', '自動雙面列印', '最大解析度',
+            ['日期', '商店', '品牌', '型號', '原廠代碼', '價格', '類型', '列印類型', '技術', '每月列印量', '最大尺寸', '自動雙面列印', '最大解析度',
              '列印速度', '暖機速度', '第一張打印時間', '掃描器類型', '最大掃描尺寸', '掃描解析度', '雙面掃描', '掃描進紙量',
              '彩色掃描速度', '黑白掃描速度', '複印解析度', '複印速度', '首張複印時間', '紙匣容量', '手動進紙匣容量', '碳粉壽命',
              '介面', 'Wifi 列印', '直接列印', 'Web介面', '支援作業系統', '顯示類型', '顯示器尺寸', '產品尺寸', '產品重量'])
 
     def process_item(self, item, spider):
-        self.writer.writerow((item['date'], item['brand'], item['model'], item['code'], item['price'], item['type'],
+        self.writer.writerow((item['date'], item['shop'], item['brand'], item['model'], item['code'], item['price'], item['type'],
                               item['print_type'], item['print_tech'], item['qt_print_month'], item['max_size'],
                               item['auto_duplex'], item['max_resolution'], item['print_speed'], item['warm_up'],
                               item['first_print'], item['scanner_type'], item['scanner_size'],
@@ -110,6 +110,34 @@ class PrinterPricePipeline(object):
                               item['interface'], item['wifi_print'], item['direct_print'], item['web_interface'],
                               item['support_os'],
                               item['display_type'], item['display_size'], item['dimension'], item['weight']))
+        return item
+
+    def close_spider(self, spider):
+        self.file.close()
+
+class YijialePipeline(object):
+    def open_spider(self, spider):
+        self.file = open('yijiale.csv', 'a', encoding='utf-8', newline='')
+        self.writer = csv.writer(self.file)
+        self.writer.writerow(
+            ['日期', '分店名稱', '地址'])
+
+    def process_item(self, item, spider):
+        self.writer.writerow((item['date'], item['name'], item['address']))
+        return item
+
+    def close_spider(self, spider):
+        self.file.close()
+
+class ConsumablePipeline(object):
+    def open_spider(self, spider):
+        self.file = open('consumable.csv', 'a', encoding='utf-8', newline='')
+        self.writer = csv.writer(self.file)
+        self.writer.writerow(
+            ['日期', '品牌', '型號', '適用機型', '壽命', '價格'])
+
+    def process_item(self, item, spider):
+        self.writer.writerow((item['date'], item['brand'], item['model'], item['machine'], item['life'], item['price']))
         return item
 
     def close_spider(self, spider):

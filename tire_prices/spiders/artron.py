@@ -18,9 +18,12 @@ class ArtronSpider(CrawlSpider):
 
     def parse_item(self, response):
         item = {}
-        response = response.replace(body=response.body.replace(b'<sup>', b'^').replace(b'</sup>', b'').replace(b'\r\n', b''))
+        response = response.replace(body=response.body.replace(b'<sup>', b'^').replace(b'</sup>', b'').replace(b'\r\n', b'').replace(b'<b>', b'').replace(b'</b>', b''))
         keys = response.xpath('//div[3]/div[2]/div[2]/div[1]/div[1]/div[2]/table[1]//tr/td[not(@colspan) and position()=1]').extract()
         values = response.xpath('//div[3]/div[2]/div[2]/div[1]/div[1]/div[2]/table[1]//tr/td[2]').extract()
+        full_name = response.xpath('//div[1]/div[2]/div[1]/h1/text()').get() # 產品名稱
+        item_list = full_name.split(' ') # Split full string to list
+        item['code'] = response.xpath("normalize-space(//div[@class='tovar_block_pn']/text())").get().split(' ')[1]
         new_keys = []
         for i in keys:
             key = i.replace('<td>', '').replace('</td>', '').replace('<a>', '').replace('</a>', '').replace('<strong', '').replace('</strong>', '').replace('<p>', '').replace('</p>', '').replace('\xa0', '')
@@ -30,5 +33,10 @@ class ArtronSpider(CrawlSpider):
             value = j.replace('<td>', '').replace('</td>', '').replace('\xa0', ' ').replace('<nobr>', '').replace('</nobr>', '').replace('\t\t\t', '').replace('\t', '').replace('<p>', '').replace('</p>', '')
             new_values.append(value)
         data = dict(zip(new_keys, new_values))
+        item['shop'] = 'Regard'
+        item['country'] = 'Russia'
+        item['date'] = str(datetime.date.today())
+        item['price'] = response.xpath('normalize-space(//div[@class="item_current_price"]/text())').get().replace('₽', '').replace(' ', '')
+
         print(data)
         # return item

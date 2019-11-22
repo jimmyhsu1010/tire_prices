@@ -23,6 +23,8 @@ class TirePricesItem(scrapy.Item):
 
 class PrinterItem(scrapy.Item):
     date = scrapy.Field() # 爬取日期
+    shop = scrapy.Field() # 店名
+    country = scrapy.Field() # 所在國家
     # currency = scrapy.Field() # 爬取當日匯率
     brand = scrapy.Field() # 品牌名稱
     model = scrapy.Field() # 型號
@@ -61,6 +63,17 @@ class PrinterItem(scrapy.Item):
     dimension = scrapy.Field()
     weight = scrapy.Field()
 
+class YijialeItem(scrapy.Item):
+    date = scrapy.Field()
+    name = scrapy.Field() # 店名
+    address = scrapy.Field() # 地址
 
+class ConsumableItem(scrapy.Item):
+    date = scrapy.Field()
+    brand = scrapy.Field()
+    model = scrapy.Field()
+    machine = scrapy.Field()
+    life = scrapy.Field()
+    price = scrapy.Field()
 
 

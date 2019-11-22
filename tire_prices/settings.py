@@ -40,7 +40,7 @@ CONCURRENT_REQUESTS = 32
 
 # Override the default request headers:
 DEFAULT_REQUEST_HEADERS = {
-  'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'Accept': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36',
   'Accept-Language': 'en',
 }
 
@@ -68,7 +68,7 @@ ITEM_PIPELINES = {
    'tire_prices.pipelines.TirePricesPipeline': 300,
    'tire_prices.pipelines.MySQLPipeline': 200,
    'tire_prices.pipelines.ZapaskaPricesPipeline': 250,
-   'tire_prices.pipelines.PrinterPricePipeline': 100
+   'tire_prices.pipelines.PrinterPricePipeline': 100, 'tire_prices.pipelines.YijialePipeline': 150, 'tire_prices.pipelines.ConsumablePipeline': 180,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -95,8 +95,8 @@ ITEM_PIPELINES = {
 DOWNLOAD_FAIL_ON_DATALOSS = False
 
 # MySQL setting
-MYSQL_HOST = 'localhost'
-MYSQL_DB_NAME = 'tire_price'
-MYSQL_USER = 'root'
-MYSQL_PASSWD = 'o100011007'
-MYSQL_PORT = 3306
+# MYSQL_HOST = 'localhost'
+# MYSQL_DB_NAME = 'tire_price'
+# MYSQL_USER = 'root'
+# MYSQL_PASSWD = 'o100011007'
+# MYSQL_PORT = 3306
