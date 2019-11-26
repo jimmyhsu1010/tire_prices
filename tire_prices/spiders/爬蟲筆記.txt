@@ -1,0 +1,22 @@
+response = response.replace(body=response.body.replace(b'<sup>',b'^').replace(b'</sup>',b'')) # 替換掉產品頁html裡面的<sup>平方表示，不然會變成2個element
+
+response.xpath('//div[3]/div[2]/div[2]/div[1]/div[1]/div[2]/table[1]//tr/td[1]/text()').extract() # 產品頁spec keys
+
+values = response.xpath('//div[3]/div[2]/div[2]/div[1]/div[1]/div[2]/table[1]//tr/td[2]/text()[1]').extract() # 產品頁spec values（有少一個，因為interface沒有value)
+
+response.xpath('//div/h1[@class="tovar_title"]/text()').get() # 產品名稱
+
+response.xpath('normalize-space(//div[@class="tovar_block_pn"]/text())').get().replace('PN: ','') # 原產代碼
+
+# Newegg
+response = response.replace(body=response.body.replace(b'<br>', b', ')) # 去掉<br>標籤，不然最後keys和values的length會不一樣
+keys = response.xpath('//fieldset/dl/dt[1]//text()').extract()
+values = response.xpath('//fieldset/dl/dd[1]/text()').extract()
+best_sellers = response.xpath('//li/div[1]/div[2]/a[1]/@title').extract() # 最佳sellers名稱
+best_sellers_websites = response.xpath('//li/div[1]/div[2]/a[1]/@href').extract()
+response.xpath("//ul[@class='price price-product-cells price-main-product has-label-financing']/li[@class='price-current']/descendant::*/text()")
+response.xpath("//li[@class='price-current']//strong/text()").extract()
+# Krokus
+//div/article[1]/div[5]/blockquote[1]/p[1] # Short description
+//div/article[1]/div[4]/blockquote[1]/p[1] # Entrance ticket costs
+
