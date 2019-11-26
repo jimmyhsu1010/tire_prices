@@ -31,7 +31,7 @@ class TirePricesPipeline(object):
         self.file.close()
 
 
-class MySQLPipeline(object):
+# class MySQLPipeline(object):
 
     # @classmethod
     # def from_crawler(cls, crawler):
@@ -42,30 +42,30 @@ class MySQLPipeline(object):
     #     cls.PASSWD = crawler.settings.get("MYSQL_PASSWD", 'o100011007')
     #     return cls()
 
-    def open_spider(self, spider):
-        self.conn = mysql.connector.connect(database="tire_price", user="root", password="o100011007", )
+    # def open_spider(self, spider):
+        #self.conn = mysql.connector.connect(database="tire_price", user="root", password="o100011007", )
 
-    def close_spider(self, spider):
-        self.conn.close()
+    # def close_spider(self, spider):
+        #self.conn.close()
 
-    def process_item(self, item, spider):
-        cursor = self.conn.cursor()
-        values = (
-            item['date'],
-            item['company'],
-            item['brand'],
-            item['season'],
-            item['model'],
-            item['size'],
-            item['diameter'],
-            item['index'],
-            item['price'],
-        )
-        sql = 'INSERT INTO price VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)'
-        cursor.execute(sql, values)
-        self.conn.commit()
-
-        return item
+    # def process_item(self, item, spider):
+        # cursor = self.conn.cursor()
+        # values = (
+        #     item['date'],
+        #     item['company'],
+        #     item['brand'],
+        #     item['season'],
+        #     item['model'],
+        #     item['size'],
+        #     item['diameter'],
+        #     item['index'],
+        #     item['price'],
+        # )
+        # sql = 'INSERT INTO price VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)'
+        # cursor.execute(sql, values)
+        # self.conn.commit()
+        #
+        # return item
 
 
 class ZapaskaPricesPipeline(object):
@@ -92,13 +92,13 @@ class PrinterPricePipeline(object):
         self.file = open('regard_price.csv', 'a', encoding='utf-8', newline='')
         self.writer = csv.writer(self.file)
         self.writer.writerow(
-            ['日期', '商店', '品牌', '型號', '原廠代碼', '價格', '類型', '列印類型', '技術', '每月列印量', '最大尺寸', '自動雙面列印', '最大解析度',
+            ['日期', '商店', '國家', '品牌', '型號', '原廠代碼', '價格', '類型', '列印類型', '技術', '每月列印量', '最大尺寸', '自動雙面列印', '最大解析度',
              '列印速度', '暖機速度', '第一張打印時間', '掃描器類型', '最大掃描尺寸', '掃描解析度', '雙面掃描', '掃描進紙量',
              '彩色掃描速度', '黑白掃描速度', '複印解析度', '複印速度', '首張複印時間', '紙匣容量', '手動進紙匣容量', '碳粉壽命',
              '介面', 'Wifi 列印', '直接列印', 'Web介面', '支援作業系統', '顯示類型', '顯示器尺寸', '產品尺寸', '產品重量'])
 
     def process_item(self, item, spider):
-        self.writer.writerow((item['date'], item['shop'], item['brand'], item['model'], item['code'], item['price'], item['type'],
+        self.writer.writerow((item['date'], item['shop'], item['country'], item['brand'], item['model'], item['code'], item['price'], item['type'],
                               item['print_type'], item['print_tech'], item['qt_print_month'], item['max_size'],
                               item['auto_duplex'], item['max_resolution'], item['print_speed'], item['warm_up'],
                               item['first_print'], item['scanner_type'], item['scanner_size'],
@@ -138,6 +138,41 @@ class ConsumablePipeline(object):
 
     def process_item(self, item, spider):
         self.writer.writerow((item['date'], item['brand'], item['model'], item['machine'], item['life'], item['price']))
+        return item
+
+    def close_spider(self, spider):
+        self.file.close()
+
+class NeweggPipeline(object):
+    def open_spider(self, spider):
+        self.file = open('newegg.csv', 'a', encoding='utf-8', newline='')
+        self.writer = csv.writer(self.file)
+        self.writer.writerow(
+            ['Date', 'Shop', 'Country', 'Brand', 'Series', 'Model', 'Part Number', 'Recommended Use', 'Functions',
+             'Display',
+             'Output type', 'Laser Technology', 'Black Print Speed', 'Color Print Speed', 'Black Print Quality',
+             'Time To First Page (seconds)', 'Print Languages, std.', 'Duplex printing', 'Max. Duty Cycle',
+             'Copy Speed, Black', 'Copy Speed, Color',
+             'Copy Quality, Black',
+             'Max. Document Enlargement', 'Max. Document Reduction', 'Max. Number of Copies', 'Copy Features',
+             'Scan Element', 'Scan Resolution, Optical',
+             'Scan Resolution, Hardware', 'Scan Features', 'Color Fax', 'Fax Transmission Speed', 'Fax Memory',
+             'Fax Resolutions', 'Paper Trays, std.',
+             'Paper Trays, max.', 'Input Capacity, std.', 'Output Capacity, std.', 'Media Type', 'Media sizes supported', 'USB Ports', 'Network Ports',
+             'Other Ports', 'Processor(MHz)', 'Memory, std.', 'Memory, max.', 'Power Requirements',
+             'Power Consumption', 'Dimensions',
+             'Weight', 'Package Contents', 'Cartridges Compatible', 'Date First Available'])
+
+    def process_item(self, item, spider):
+        self.writer.writerow((item['date'], item['shop'], item['country'], item['brand'], item['series'], item['model'], item['code'],
+                              item['type'], item['functions'], item['display'], item['output_type'], item['laser_tech'], item['black_ppm'],
+                              item['color_ppm'], item['black_resolution'], item['time_to_first_page'], item['print_language'], item['duplex_print'],
+                              item['max_duty_cycle'], item['copy_ppm_black'], item['copy_ppm_color'], item['copy_resolution_black'], item['max_doc_enlargement'],
+                               item['max_reduct'], item['max_num_copy'], item['copy_feature'], item['scan_element'], item['scan_resolution_optical'], item['scan_resolution_hardware'],
+                              item['scan_feature'], item['fax_trans_speed'], item['fax_memory'], item['fax_resolution'], item['paper_tray_std'], item['paper_tray_max'],
+                              item['input_cap_std'], item['output_cap_std'], item['media_type'], item['media_size_support'], item['usb_port'], item['network_port'],
+                              item['other_port'], item['processor'], item['memory_std'], item['memory_max'], item['power_requirement'], item['power_consumption'],
+                              item['dimension'], item['weight'], item['package_content'], item['tonner'], item['date_first_available']))
         return item
 
     def close_spider(self, spider):

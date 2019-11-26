@@ -22,12 +22,12 @@ NEWSPIDER_MODULE = 'tire_prices.spiders'
 ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-CONCURRENT_REQUESTS = 32
+CONCURRENT_REQUESTS = 8
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-# DOWNLOAD_DELAY = 1
+DOWNLOAD_DELAY = 1
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
@@ -46,15 +46,15 @@ DEFAULT_REQUEST_HEADERS = {
 
 # Enable or disable spider middlewares
 # See https://doc.scrapy.org/en/latest/topics/spider-middleware.html
-#SPIDER_MIDDLEWARES = {
-#    'tire_prices.middlewares.TirePricesSpiderMiddleware': 543,
-#}
+SPIDER_MIDDLEWARES = {
+   'tire_prices.middlewares.TirePricesSpiderMiddleware': 543,
+}
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    'tire_prices.middlewares.TirePricesDownloaderMiddleware': 543,
-#}
+DOWNLOADER_MIDDLEWARES = {
+   'tire_prices.middlewares.TirePricesDownloaderMiddleware': 543,
+}
 
 # Enable or disable extensions
 # See https://doc.scrapy.org/en/latest/topics/extensions.html
@@ -66,9 +66,10 @@ DEFAULT_REQUEST_HEADERS = {
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
    'tire_prices.pipelines.TirePricesPipeline': 300,
-   'tire_prices.pipelines.MySQLPipeline': 200,
+   # 'tire_prices.pipelines.MySQLPipeline': 200,
    'tire_prices.pipelines.ZapaskaPricesPipeline': 250,
    'tire_prices.pipelines.PrinterPricePipeline': 100, 'tire_prices.pipelines.YijialePipeline': 150, 'tire_prices.pipelines.ConsumablePipeline': 180,
+    'tire_prices.pipelines.NeweggPipeline': 210,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -100,3 +101,15 @@ DOWNLOAD_FAIL_ON_DATALOSS = False
 # MYSQL_USER = 'root'
 # MYSQL_PASSWD = 'o100011007'
 # MYSQL_PORT = 3306
+
+# SPLASH_URL = 'http://127.0.0.1:8050'
+# DOWNLOADER_MIDDLEWARES = {
+# 'scrapy_splash.SplashCookiesMiddleware': 723,
+# 'scrapy_splash.SplashMiddleware': 725,
+# 'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,
+# }
+# SPIDER_MIDDLEWARES = {
+# 'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
+# }
+# DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
+# HTTPCACHE_STORAGE = 'scrapy_splash.SplashAwareFSCacheStorage'
