@@ -235,7 +235,7 @@ class NeweggSpider(CrawlSpider):
                 item['date_first_available'] = data['Date First Available']
             else:
                 item['date_first_available'] = 'N/A'
-            yield item
+            return item
         else:
             print('資料不需要，跳過！')
             pass
